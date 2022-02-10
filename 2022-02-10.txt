@@ -1,0 +1,60 @@
+#include "SR04.h"           //für Infrarot-Sensor
+#include <Servo.h>          //für Servo = Schranke
+#include <LiquidCrystal.h>  //für LCD
+
+//IR-Sensor
+int trig_pin = 4; //IR-Trig
+int echo_pin = 3; //IR-Echo
+SR04 sensor = SR04(echo_pin,trig_pin); 
+long distance; //Distanz von IR-Sensor gemessen
+
+//Schranke
+Servo myServo;
+int servoDelay =5000; //5s
+int servoMax=90; //Schranke öffnet sich zu 90°
+int servoMin=0;
+
+//LCD
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+
+//Variabeln
+int capacity;
+
+
+void setup() {
+  // put your setup code here, to run once:
+  
+  //IR-Sensor
+  Serial.begin(9600);
+  delay(1000);
+
+  //Schranke
+  myServo.attach(5); //Servo an Pin5
+
+  //LCD
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("Freie Plaetze:");
+
+  capacity = 5;
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  distance=sensor.Distance();
+  Serial.println(distance);
+  delay(1000);
+
+  myServo.write(servoMin);
+  if ( (distance<5) && (capacity>0) ){
+    myServo.write(servoMax);
+    delay(servoDelay); //nach der letzten kurzen Distanz hat das Auto 5s zum Einfahren
+    capacity = capacity - 1;
+  }
+
+  lcd.setCursor(0, 1);
+  lcd.print(capacity);
+
+}

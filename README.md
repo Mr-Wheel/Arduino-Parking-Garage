@@ -1,5 +1,5 @@
 # arduino_parking_garage
-![picture of setup](/img/photo.jpg?raw=true)  
+![picture of setup](/img/photo.png?raw=true)  
 arduino [code](/code.ino) and [project documentation](/documentation.pdf) (in German) for a parking garage model that 
 - detects in- and outgoing cars
 - tracks and displays the number of available parking spots
